@@ -7,8 +7,11 @@ import multer from "multer"
 import morgan from "morgan"
 import helmet from "helmet"
 import path from "path"
+import userRoutes from "./routes/users.js"
+import authRoutes from "./routes/auth.js"
 import {fileURLToPath} from "url"
 import {register} from "./controllers/auth.js"
+import { verifyToken } from "./middleware/auth.js"
 
 const __filename=fileURLToPath(import.meta.url)
 const __dirname=path.dirname(__filename)
@@ -35,6 +38,9 @@ const storage=multer.diskStorage({
 const upload=multer({storage})
 // routes with files
 app.post("/auth/register",upload.single("picture"), register)
+// routes
+app.use('/auth',authRoutes)
+app.use("/users",userRoutes)
 
 // MONGOOSE SETUP
 const PORT=process.env.PORT || 6001
